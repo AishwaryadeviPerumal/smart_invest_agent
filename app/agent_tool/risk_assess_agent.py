@@ -42,7 +42,7 @@ def evaluate(ticker: str, news_data: dict, analyst_data: dict,allocation_pct: fl
         "allocation_pct": allocation_pct
     }
 
-analyst_agent = Agent(name="analyst_agent",
+risk_assess_agent = Agent(name="risk_assess_agent",
                       model="gemini-2.5-flash-lite",
                       description="Assess risk based on the market data and news data for the ticker using the evaluate tool.",
                       instruction=("You are an excellent Risk Assess assistant."
