@@ -34,9 +34,11 @@ news_agent = Agent(name="news_agent",
                    description="Returns randomized news headlines for portfolio tickers using the get_news_for_portfolio tool.",
                    instruction=("You are an excellent news generator assistant."
                                 "when asked to provide news for a portfolio, call the 'get_news_for_portfolio'tool "
-                                "and return the tool's news field as result to the user."),
+                                "when response received, fetch the news field and evaluate the sentiment of the news, whether it is positive or negative"
+                                "then add a new field called 'sentiment' with value being positive or negative based on your sentiment analysis"
+                                "now return the tool's news field and sentiment fields as a result to the user."),
                    tools=[get_news_for_portfolio])
 
 if __name__ == "__main__":
-    result=portfolio = get_news_for_portfolio(["AAPL", "TSLA", "MSFT"])
+    result=get_news_for_portfolio(["AAPL", "TSLA", "MSFT"])
     print(result)
