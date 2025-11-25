@@ -1,9 +1,9 @@
 import random
 from google.adk.agents import Agent
 
-market_data={ 'AAPL': {"ticker": 'AAPL', "price": 100.0, "volume": 120000},
-              'TSLA': {"ticker": 'TSLA', "price": 150.0, "volume": 13000},
-              'MSFT': {"ticker": 'MSFT', "price": 200.0, "volume": 140000}}
+market_data={ 'AAPL': {"ticker": 'AAPL', "price": 100.0, "volume": 120000, "move": "UP"},
+              'TSLA': {"ticker": 'TSLA', "price": 150.0, "volume": 13000, "move": "DOWN"},
+              'MSFT': {"ticker": 'MSFT', "price": 200.0, "volume": 140000, "move": "UP"}}
 
 def get_market_data_for_ticker(ticker: str)-> dict[str,any]:
     if ticker in market_data.keys():
@@ -11,7 +11,7 @@ def get_market_data_for_ticker(ticker: str)-> dict[str,any]:
         current_market_date['price']=current_market_date['price']+(random.randint(1,10))
         current_market_date['volume']= current_market_date['volume']+(random.randint(100,200))
         return current_market_date
-    return { "ticker": {ticker}, "price": random.randint(1,200), "volume": random.randint(100000,200000) }
+    return { "ticker": {ticker}, "price": random.randint(1,200), "volume": random.randint(100000,200000), "move": "UP"}
 
 
 analyst_agent = Agent(name="analyst_agent",
