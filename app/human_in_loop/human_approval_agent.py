@@ -4,7 +4,7 @@ from google.adk.tools import tool_context
 
 options=[True, False]
 
-async def handle_human_approval(ticker,amount,action)-> dict[str,any]:
+def handle_human_approval(ticker,amount,action)-> dict[str,any]:
 
 
     if not tool_context.tool_confirmation:

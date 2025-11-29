@@ -22,7 +22,7 @@ retry_config = types.HttpRetryOptions(
 smart_invest_agent = LlmAgent(
     name="smart_invest_agent",
     model=Gemini(model="gemini-2.5-flash-lite", retry_options=retry_config),
-    instruction="""You are a smart invest assistant.
+    instruction="""You are a smart investment assistant.
   
   When users request to rebalance portfolio:
    1. Use the news_agent tool with the portfolio details to get news data
