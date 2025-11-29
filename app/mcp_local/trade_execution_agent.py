@@ -10,7 +10,7 @@ async def execute_trade(self, ticker: str, action: str, amount: str)-> dict[str,
     return {'status': 'Success','message': str.format(f'[MCP Tool] Execution to {action} {amount} shares of {ticker} is success!')}
 
 
-news_agent = Agent(name="trade_execution_agent",
+trade_execution_agent = Agent(name="trade_execution_agent",
                        model="gemini-2.5-flash-lite",
                        description="Executes sell/buy order for the given ticker with the amount using the execute_trade tool.",
                        instruction=("You are an excellent Trade Executor assistant."

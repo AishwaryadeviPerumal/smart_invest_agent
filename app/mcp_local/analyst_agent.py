@@ -14,13 +14,24 @@ def get_market_data_for_ticker(ticker: str)-> dict[str,any]:
     return { "ticker": {ticker}, "price": random.randint(1,200), "volume": random.randint(100000,200000), "move": "UP"}
 
 
+def get_market_data_for_portfolio(portfolio: list[str])-> dict[str,any]:
+    """
+    ADK-exposed tool that takes a list of tickers and returns random market data for each.
+    ADK tools typically return a JSON-serializable result (dict).
+    """
+    market_report={}
+    for ticker in portfolio:
+        ticker_market_data = get_market_data_for_ticker(ticker)
+        market_report[ticker] = ticker_market_data
+    return {'status': 'Success', 'market_report':market_report}
+
 analyst_agent = Agent(name="analyst_agent",
                    model="gemini-2.5-flash-lite",
-                   description="Returns market data for the ticker using the get_market_data_for_ticker tool.",
+                   description="Returns market data for the tickers in portfolio using the get_market_data_for_portfolio tool.",
                    instruction=("You are an excellent market data analyst assistant."
-                                "when asked to provide market data for a ticker, call the 'get_market_data_for_ticker' tool "
+                                "when asked to provide market data for a portfolio, call the 'get_market_data_for_portfolio' tool "
                                 "and return the tool's response as result to the user."),
-                   tools=[get_market_data_for_ticker])
+                   tools=[get_market_data_for_portfolio])
 
 if __name__ == "__main__":
     tickers=["AAPL", "TSLA", "MSFT"]

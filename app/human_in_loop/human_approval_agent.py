@@ -2,19 +2,18 @@ import random
 
 from google.adk.tools import tool_context
 
-options=['Yes', 'No']
+options=[True, False]
 
-async def get_human_approval(ticker,amount,action)-> dict[str,any]:
-    is_approved=random.choice(options)
-    approved_rejected= 'Approved' if is_approved else 'Rejected'
+async def handle_human_approval(ticker,amount,action)-> dict[str,any]:
+
 
     if not tool_context.tool_confirmation:
         tool_context.request_confirmation(
             hint=f"Do you want to approve the proposed action?",
             payload={"ticker": ticker, "amount": {amount}, "action": {action}})
         return {  # This is sent to the Agent
-            "status": is_approved,
-            "message": f"Order for {ticker} with amount {amount} is {approved_rejected} for {action}",
+            "status": 'pending',
+            "message": f"Order for {ticker} with amount {amount} for {action} is waiting for human approval",
         }
 
     if tool_context.tool_confirmation.confirmed:
@@ -31,3 +30,7 @@ async def get_human_approval(ticker,amount,action)-> dict[str,any]:
             "message": f"Order for {ticker} with amount {amount} is Rejected for {action}",
         }
 
+def get_human_decision():
+    is_approved=random.choice(options)
+    # approved_rejected= 'Approved' if is_approved else 'Rejected'
+    return is_approved

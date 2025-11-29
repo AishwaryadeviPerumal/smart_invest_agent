@@ -1,6 +1,6 @@
 import random
 from google.adk.agents import Agent
-from app.authentication.authentication import google_api_key
+#from app.authentication.authentication import google_api_key
 
 
 def get_news_for_ticker(ticker: str)-> str:
