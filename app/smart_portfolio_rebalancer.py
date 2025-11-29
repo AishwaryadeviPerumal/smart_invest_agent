@@ -7,10 +7,12 @@ from google.adk.runners import Runner
 from google.adk.memory import InMemoryMemoryService
 from google.adk.sessions import InMemorySessionService
 
+from app.authentication.authentication import set_api_key
 from app.human_in_loop.human_approval_agent import get_human_decision
 from app.smart_invest_agent import smart_invest_agent
 from app.utils.utils import check_for_approval, create_approval_response, print_agent_response
 
+set_api_key()
 
 session_service = InMemorySessionService()
 
