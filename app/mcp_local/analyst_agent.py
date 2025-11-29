@@ -19,11 +19,11 @@ def get_market_data_for_portfolio(portfolio: list[str])-> dict[str,any]:
     ADK-exposed tool that takes a list of tickers and returns random market data for each.
     ADK tools typically return a JSON-serializable result (dict).
     """
-    market_report={}
+    market_data={}
     for ticker in portfolio:
         ticker_market_data = get_market_data_for_ticker(ticker)
-        market_report[ticker] = ticker_market_data
-    return {'status': 'Success', 'market_report':market_report}
+        market_data[ticker] = ticker_market_data
+    return {'status': 'Success', 'market_data':market_data}
 
 analyst_agent = Agent(name="analyst_agent",
                    model="gemini-2.5-flash-lite",

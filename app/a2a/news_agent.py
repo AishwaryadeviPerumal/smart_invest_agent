@@ -3,7 +3,7 @@ from google.adk.agents import Agent
 #from app.authentication.authentication import google_api_key
 
 
-def get_news_for_ticker(ticker: str)-> str:
+async def get_news_for_ticker(ticker: str)-> str:
     news_events = [
         f"Positive outlook expected for {ticker}.",
         f"Negative sentiment detected around {ticker}.",
@@ -18,25 +18,25 @@ def get_news_for_ticker(ticker: str)-> str:
     ]
     return random.choice(news_events)
 
-def get_news_for_portfolio(portfolio: list[str])-> dict[str,any]:
+async def get_news_for_portfolio(portfolio: list[str])-> dict[str,any]:
     """
     ADK-exposed tool that takes a list of tickers and returns random news for each.
     ADK tools typically return a JSON-serializable result (dict).
     """
+    sentiment_options =['positive','negative']
     news_report={}
     for ticker in portfolio:
-        ticker_news = get_news_for_ticker(ticker)
+        ticker_news = await get_news_for_ticker(ticker)
         news_report[ticker] = ticker_news
-    return {'status': 'Success', 'news':news_report}
+    sentiment = random.choice(sentiment_options)
+    return {'status': 'Success', 'news':news_report,'sentiment': sentiment}
 
 news_agent = Agent(name="news_agent",
                    model="gemini-2.5-flash-lite",
                    description="Returns randomized news headlines for portfolio tickers using the get_news_for_portfolio tool.",
                    instruction=("You are an excellent news generator assistant."
                                 "when asked to provide news for a portfolio, call the 'get_news_for_portfolio'tool "
-                                "when response received, fetch the news field and evaluate the sentiment of the news, whether it is positive or negative"
-                                "then add a new field called 'sentiment' with value being positive or negative based on your sentiment analysis"
-                                "now return the tool's news field and sentiment fields as a result to the user."),
+                                "when response received, return the tool's response as a result to the user."),
                    tools=[get_news_for_portfolio])
 
 if __name__ == "__main__":

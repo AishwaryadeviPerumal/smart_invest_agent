@@ -3,7 +3,7 @@ import random
 from google.adk import Agent
 
 
-def evaluate(ticker: str, news_data: dict, analyst_data: dict,allocation_pct: float ):
+def evaluate(ticker: str, news_data: dict, market_data: dict,allocation_pct: float ):
     """
        Parameters:
            ticker (str): Stock symbol
@@ -20,7 +20,8 @@ def evaluate(ticker: str, news_data: dict, analyst_data: dict,allocation_pct: fl
 
     risk_score = 0
     sentiment = news_data['sentiment']
-    move=analyst_data['move']
+
+    move=market_data['move']
     if sentiment == 'positive'and allocation_pct > 20 and move == 'up' :
         risk_score -= 3
     elif sentiment == 'positive'and allocation_pct > 20 and move == 'down' :
@@ -46,7 +47,7 @@ risk_assess_agent = Agent(name="risk_assess_agent",
                       model="gemini-2.5-flash-lite",
                       description="Assess risk based on the market data and news data for the ticker using the evaluate tool.",
                       instruction=("You are an excellent Risk Assess assistant."
-                                   "when asked to evaluate risk for a portfolio, call the 'evaluate' tool "
+                                   "when asked to evaluate risk for the given ticker with news_data, market_data and allocation_pct, call the 'evaluate' tool "
                                    "and return the tool's response as result to the user."),
                       tools=[evaluate])
 
