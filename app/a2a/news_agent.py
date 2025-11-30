@@ -27,17 +27,22 @@ async def get_news_for_portfolio(portfolio: list[str])-> dict[str,any]:
     news_report={}
     for ticker in portfolio:
         ticker_news = await get_news_for_ticker(ticker)
-        news_report[ticker] = ticker_news
-    sentiment = random.choice(sentiment_options)
-    return {'status': 'Success', 'news':news_report,'sentiment': sentiment}
+        sentiment = random.choice(sentiment_options)
+        news_report[ticker] = {'news': ticker_news, 'sentiment': sentiment}
+
+    response={'status': 'Success', 'news':news_report}
+    print(response)
+    return response
 
 news_agent = Agent(name="news_agent",
                    model="gemini-2.5-flash-lite",
-                   description="Returns randomized news headlines for portfolio tickers using the get_news_for_portfolio tool.",
+                   description="Returns randomized news headlines for portfolio tickers using the 'get_news_for_portfolio()'",
                    instruction=("You are an excellent news generator assistant."
-                                "when asked to provide news for a portfolio, call the 'get_news_for_portfolio'tool "
-                                "when response received, return the tool's response as a result to the user."),
-                   tools=[get_news_for_portfolio])
+                                "when asked to provide news for a portfolio, call the 'get_news_for_portfolio()'"
+                                "when response received, return response as a result to the user."),
+                   tools=[get_news_for_portfolio],
+                   output_key="news_data",
+                   )
 
 if __name__ == "__main__":
     result=get_news_for_portfolio(["AAPL", "TSLA", "MSFT"])

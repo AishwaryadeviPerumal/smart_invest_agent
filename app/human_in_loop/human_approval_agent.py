@@ -6,7 +6,7 @@ options=[True, False]
 
 def handle_human_approval(ticker,amount,action)-> dict[str,any]:
 
-
+    print('human approval......')
     if not tool_context.tool_confirmation:
         tool_context.request_confirmation(
             hint=f"Do you want to approve the proposed action?",

@@ -2,14 +2,15 @@ import random
 
 from google.adk import Agent
 
+from app.data.portfolio_data import portfolio_data
 
-def evaluate(ticker: str, news_data: dict, market_data: dict,allocation_pct: float ):
+
+def evaluate(ticker: str, ticker_news_data: dict, ticker_market_data: dict ):
     """
        Parameters:
            ticker (str): Stock symbol
-           analyst_data (dict): Output from analyst_agent.get_market_data_for_ticker()
-           news_data (dict): Output from news_agent.get_news_for_portfolio()
-           allocation_pct (float): % of portfolio in this position
+           ticker_market_data (dict): Output from analyst_agent.get_market_data_for_ticker()
+           ticker_news_data (dict): Output from news_agent.get_news_for_portfolio()
 
        Returns:
            dict: Full risk evaluation.
@@ -19,9 +20,10 @@ def evaluate(ticker: str, news_data: dict, market_data: dict,allocation_pct: flo
 
 
     risk_score = 0
-    sentiment = news_data['sentiment']
+    sentiment = ticker_news_data['sentiment']
+    allocation_pct=portfolio_data[ticker]
 
-    move=market_data['move']
+    move=ticker_market_data['move']
     if sentiment == 'positive'and allocation_pct > 20 and move == 'up' :
         risk_score -= 3
     elif sentiment == 'positive'and allocation_pct > 20 and move == 'down' :
@@ -43,13 +45,25 @@ def evaluate(ticker: str, news_data: dict, market_data: dict,allocation_pct: flo
         "allocation_pct": allocation_pct
     }
 
+
+def evaluate_portfolio(tickers: list[str],news_data: dict, market_data: dict ):
+    risk_data=[]
+    for ticker in tickers:
+        print(ticker)
+        risk=evaluate(ticker,news_data[ticker],market_data[ticker])
+        risk_data[ticker]=risk
+    return risk_data
+
+
+
 risk_assess_agent = Agent(name="risk_assess_agent",
                       model="gemini-2.5-flash-lite",
-                      description="Assess risk based on the market data and news data for the ticker using the evaluate tool.",
+                      description="Assess risk based on the {market_data} and {news_data} for the portfolio {portfolio} using the 'evaluate_portfolio()'",
                       instruction=("You are an excellent Risk Assess assistant."
-                                   "when asked to evaluate risk for the given ticker with news_data, market_data and allocation_pct, call the 'evaluate' tool "
+                                   "when asked to evaluate risk for the given ticker with {market_data} and {news_data}, call the 'evaluate_portfolio()'"
                                    "and return the tool's response as result to the user."),
-                      tools=[evaluate])
+                      tools=[evaluate_portfolio],
+                          output_key="risk_data")
 
 if __name__ == "__main__":
     tickers=["AAPL", "TSLA", "MSFT"]

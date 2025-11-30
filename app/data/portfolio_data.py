@@ -1,0 +1,1 @@
+portfolio_data={"AAPL":51000,"TSLA":2000,"MSFT":5000}

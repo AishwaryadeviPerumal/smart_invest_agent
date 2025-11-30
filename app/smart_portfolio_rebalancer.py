@@ -8,6 +8,7 @@ from google.adk.memory import InMemoryMemoryService
 from google.adk.sessions import InMemorySessionService
 
 from app.authentication.authentication import set_api_key
+from app.data.portfolio_data import portfolio_data
 from app.human_in_loop.human_approval_agent import get_human_decision
 from app.smart_invest_agent import smart_invest_agent
 from app.utils.utils import check_for_approval, create_approval_response, print_agent_response
@@ -94,10 +95,10 @@ async def run_rebalance_portfolio(query: str):
     print("✅ Workflow function ready")
 
 if __name__ == "__main__":
-    portfolio: list = ["AAPL", "TSLA", "MSFT"]
+    portfolio: list = portfolio_data.keys()
     print('hello')
     asyncio.run(
         run_rebalance_portfolio(
-            f"check portfolio and suggest buy/sell order with details to rebalance the portfolio:{portfolio}"
+            f"suggest buy/sell order with details to rebalance the portfolio:{portfolio}"
         )
     )
